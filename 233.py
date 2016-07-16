@@ -15,6 +15,7 @@ H = pygame.image.load("H.jpg")
 J = pygame.image.load("J.jpg")
 K = pygame.image.load("K.jpg")
 M = pygame.image.load("Monster.jpg")
+H_ex = pygame.image.load("H-explode.gif")
 Monster = pygame.transform.scale(M, (75, 75))
 Abilityh_x = 1000
 Abilityh_y = 600
@@ -26,6 +27,7 @@ Ability_j = pygame.transform.scale(J, (50, 50))
 Ability_k = pygame.transform.scale(K, (50, 50))
 Skill_h = pygame.transform.scale(H, (50, 50))
 Skill_k = pygame.transform.scale(K, (50, 50))
+H_explode = pygame.transform.scale(H_ex, (75, 75))
 lolx = 100
 loly = 100
 cd_g = 0
@@ -40,6 +42,9 @@ listk = []
 atkrate = 2.5
 minimum = 250
 gg = [0, 0]
+b = 0
+explode = [0, 0]
+exist_ex = 0
 
 def zhengchangmoshi():
     global cdh, cdj, cdk
@@ -65,6 +70,8 @@ for i in range(7):
     
 while 1:
     screen.fill(0)
+    if b:
+        screen.blit(H_explode, exRect)
     screen.blit(LOL, (lolx, loly))
     screen.blit(Skill_h, (Abilityh_x, Abilityh_y))
     for skill in range(7):
@@ -90,9 +97,13 @@ while 1:
         guyRect.left = guys[0]
         guyRect.top = guys[1]
         if hRect.colliderect(guyRect):
+            exRect = H_explode.get_rect()
+            exRect.center = ((guyRect.center[0] + Abilityh_x + 50)/ 2, (guyRect.center[1] + Abilityh_y + 50)/ 2)
             guys[2] -= 1000
             Abilityh_x = 1000
             Abilityh_y = 600
+            time_ex = pygame.time.get_ticks()
+            exist_ex = 500
         for skill in range(7):
             kRect = Skill_k.get_rect()
             kRect.left = Abilityk_x[skill]
@@ -199,7 +210,12 @@ while 1:
         lolx -= 1
     if key[3] == True:
         lolx += 1
-
+    if exist_ex > 0:
+        exist_ex = 500 - (pygame.time.get_ticks() - time_ex)
+        b = 1
+    else:
+        exist_ex = 0
+        b = 0
     if Abilityh_x < 1000:
         Abilityh_x += 5
     for skill in range(7):
