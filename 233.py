@@ -5,11 +5,17 @@ from math import *
 import math
 import random
 
+#Initialize the game
 pygame.init()
+
+#Create the screen
 screen = pygame.display.set_mode((1000, 600))
+
+#Definde key for moving
 key = [False, False, False, False]
+
+#Load images
 Ez = pygame.image.load("images/ez.jpg")
-LOL = pygame.transform.scale(Ez, (100, 100))
 G = pygame.image.load("images/G.jpg")
 H = pygame.image.load("images/H.jpg")
 J = pygame.image.load("images/J.jpg")
@@ -22,15 +28,18 @@ H_ex = pygame.image.load("images/H-explode.png")
 Bg = pygame.image.load("images/bg.png")
 Mon = pygame.image.load("images/Mons.png")
 defeat = pygame.image.load("images/defeat.png")
+Warrior = pygame.image.load("images/Warrior.png")
+Wizard = pygame.image.load("images/Wizard.png")
+Level = pygame.image.load("images/Level.png")
+score=0
+Exp=0
+Lv = 1
 #Victory = pygame.image.load("images/victory.png")
+
+#Vary the scale of images
+LOL = pygame.transform.scale(Ez, (100, 100))
 Monster = pygame.transform.scale(M, (75, 75))
 bg = pygame.transform.scale(Bg, (1000, 600))
-Abilityh_x = 1000
-Abilityh_y = 600
-Abilityk_x = [1000, 1000, 1000, 1000, 1000, 1000, 1000]
-Abilityk_y = [600, 600, 600, 600, 600, 600, 600]
-Abilityl_x = 1000
-Abilityl_y = 600
 NormalAttack = pygame.transform.scale(G, (50, 50))
 Ability_h = pygame.transform.scale(H, (50, 50))
 Ability_j = pygame.transform.scale(J, (50, 50))
@@ -41,18 +50,61 @@ Skill_k = pygame.transform.scale(K1, (50, 50))
 Skill_l = pygame.transform.scale(L1, (80, 80))
 H_explode = pygame.transform.scale(H_ex, (75, 75))
 Monst = pygame.transform.scale(Mon, (25, 25))
+level = pygame.transform.scale(Level, (90, 90))
 #victory = pygame.transform.scale(Victory, (800, 670))
+
+#Set the initial values of images' positions
+Abilityh_x = 1000
+Abilityh_y = 600
+Abilityk_x = [1000, 1000, 1000, 1000, 1000, 1000, 1000]
+Abilityk_y = [600, 600, 600, 600, 600, 600, 600]
+Abilityl_x = 1000
+Abilityl_y = 600
 defeatRect = defeat.get_rect()
 defeatRect.center = (500, 300)
+levelRect = level.get_rect()
 #victoryRect = victory.get_rect()
 #victoryRect.center = (500, 300)
 lolx = 100
 loly = 100
+def Fibonacci(x):
+    a1 = 1
+    a2 = 1
+    a3 = 2
+    for i in range(x - 1):
+        a3 = a1 + a2
+        a1 = a2
+        a2 = a3
+    return(a3 * 10)
+
+#Set the cooldown time
 cd_g = 0
 cd_h = 0
 cd_j = 0
 cd_k = 0
 cd_l = 0
+def zhengchangmoshi():
+    global cdh, cdj, cdk, cdl
+    cdh = 3000
+    cdj = 10000
+    cdk = 6000
+    cdl = 30000
+    atkrate = 1
+def wuxianhuoli():
+    global cdh, cdj, cdk, cdl
+    cdh = 1000
+    cdj = 1000
+    cdk = 1000
+    cdl = 1000
+    atkrate = 10
+zhengchangmoshi()
+
+#Distance function
+def distance(x1, y1, x2, y2):
+    return(math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1) * (y2 - y1)))
+    
+
+
 Monsters = []
 Mons = []
 badtimer = 0
@@ -72,31 +124,8 @@ cdreductionl = 0
 ang = 0
 healthRect = (250, 550, 500, 20)
 healthlength = 496
-totalHP = 1000
+totalHP = 10000
 lolHP = totalHP
-
-def zhengchangmoshi():
-    global cdh, cdj, cdk, cdl
-    cdh = 3000
-    cdj = 10000
-    cdk = 6000
-    cdl = 30000
-    atkrate = 1
-
-def wuxianhuoli():
-    global cdh, cdj, cdk, cdl
-    cdh = 1000
-    cdj = 1000
-    cdk = 1000
-    cdl = 1000
-    atkrate = 10
-
-def distance(x1, y1, x2, y2):
-    return(math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1) * (y2 - y1)))
-    
-
-zhengchangmoshi()
-
 for i in range(7):
     listk.append((i, i))
     
@@ -110,8 +139,15 @@ while 1:
     if b:
         screen.blit(H_explode, exRect)
     screen.blit(LOL, (lolx, loly))
+    levelRect.center = (lolx + 50, loly)
+    screen.blit(level, levelRect)
     screen.blit(Skill_h, (Abilityh_x, Abilityh_y))
     screen.blit(Skill_l, (Abilityl_x, Abilityl_y))
+    font1 = pygame.font.Font(None, 36)
+    Levelnumber = font1.render(str(Lv).zfill(2),True,(255, 0, 0))
+    lvRect = Levelnumber.get_rect()
+    lvRect.center= (lolx + 50, loly + 5)
+    screen.blit(Levelnumber, lvRect)
     for skill in range(7):
         screen.blit(Skill_k, (Abilityk_x[skill], Abilityk_y[skill]))
     screen.blit(Ability_h, (0, 550))
@@ -132,8 +168,12 @@ while 1:
     lRect.left = Abilityl_x
     lRect.top = Abilityl_y
     for guys in Monsters:
-        if guys[0] < -75 or guys[2] <= 0:
+        if guys[0] < -75:
             Monsters.pop(index)
+        if guys[2] <= 0:
+            score += 100
+            Monsters.pop(index)
+            Exp +=10
         if distance(guys[0], guys[1], lolx, loly) <= 400 and distance(guys[0], guys[1], lolx, loly) >= 200:
             if guys[0] - lolx != 0:
                 ang = math.tan((guys[1] - loly) / (guys[0] - lolx))
@@ -254,7 +294,7 @@ while 1:
                         cd_k = cdk
             elif event.key == K_l:
                 if cd_l == 0:
-                    Abilityl_x = lolx + 100
+                    Abilityl_x = lolx + 10
                     Abilityl_y = loly + 10
                     time_l = pygame.time.get_ticks()
                     cd_l = cdl
@@ -334,7 +374,9 @@ while 1:
     else:
         dmg_l = 800
 
-
+    if Exp >= Fibonacci(Lv):
+        Lv += 1
+        Exp = 0
 
     font = pygame.font.Font(None, 24)
     Abilityh_cd = font.render(str(cd_h//1000+1).zfill(2), True, (255, 255, 255))
@@ -349,6 +391,10 @@ while 1:
     Abilityl_cd = font.render(str(cd_l//1000+1).zfill(2), True, (255, 255, 255))
     textlRect = Abilityl_cd.get_rect()
     textlRect.center = (Ability_l.get_width()*7/2, screen.get_height()-Ability_l.get_height()/2)
+    score_display= font.render("Score: " +str(score).zfill(2),True,(255,255,255))
+    scoreRect = score_display.get_rect()
+    scoreRect.center= (500,30)
+    screen.blit(score_display, scoreRect)
     
     if cd_h > 0:
         Ability_h.set_alpha(150)
@@ -405,4 +451,3 @@ while 1:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit(0)
-        pygame.display.flip()
