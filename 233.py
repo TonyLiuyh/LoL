@@ -20,6 +20,9 @@ L2 = pygame.image.load("images/L2.jpg")
 M = pygame.image.load("images/Monster.png")
 H_ex = pygame.image.load("images/H-explode.png")
 Bg = pygame.image.load("images/bg.png")
+Mon = pygame.image.load("images/Mons.png")
+defeat = pygame.image.load("images/defeat.png")
+#Victory = pygame.image.load("images/victory.png")
 Monster = pygame.transform.scale(M, (75, 75))
 bg = pygame.transform.scale(Bg, (1000, 600))
 Abilityh_x = 1000
@@ -37,6 +40,12 @@ Skill_h = pygame.transform.scale(H, (50, 50))
 Skill_k = pygame.transform.scale(K1, (50, 50))
 Skill_l = pygame.transform.scale(L1, (80, 80))
 H_explode = pygame.transform.scale(H_ex, (75, 75))
+Monst = pygame.transform.scale(Mon, (25, 25))
+#victory = pygame.transform.scale(Victory, (800, 670))
+defeatRect = defeat.get_rect()
+defeatRect.center = (500, 300)
+#victoryRect = victory.get_rect()
+#victoryRect.center = (500, 300)
 lolx = 100
 loly = 100
 cd_g = 0
@@ -45,11 +54,12 @@ cd_j = 0
 cd_k = 0
 cd_l = 0
 Monsters = []
+Mons = []
 badtimer = 0
 MonHp = 500
 listg = []
 listk = []
-atkrate = 10
+atkrate = 1
 minimum = 250
 gg = [0, 0]
 b = 0
@@ -59,6 +69,11 @@ dmg_l = 800
 cdreductionj = 0
 cdreductionk = 0
 cdreductionl = 0
+ang = 0
+healthRect = (250, 550, 500, 20)
+healthlength = 496
+totalHP = 1000
+lolHP = totalHP
 
 def zhengchangmoshi():
     global cdh, cdj, cdk, cdl
@@ -66,7 +81,7 @@ def zhengchangmoshi():
     cdj = 10000
     cdk = 6000
     cdl = 30000
-    atkrate = 1.5
+    atkrate = 1
 
 def wuxianhuoli():
     global cdh, cdj, cdk, cdl
@@ -87,7 +102,11 @@ for i in range(7):
     
     
 while 1:
+    if lolHP <= 0:
+        screen.blit(defeat, defeatRect)
+        break
     screen.blit(bg, (0, 0))
+    pygame.draw.rect(screen, (255, 255, 255), healthRect, 0)
     if b:
         screen.blit(H_explode, exRect)
     screen.blit(LOL, (lolx, loly))
@@ -102,7 +121,7 @@ while 1:
     for g in listg:
         screen.blit(NormalAttack, (g[0], g[1]))
     if badtimer==0:
-        Monsters.append([1000, random.randint(0,475), MonHp])
+        Monsters.append([1000, random.randint(0,475), MonHp, 0])
         badtimer=100
     index = 0
     index1 = 0
@@ -115,7 +134,21 @@ while 1:
     for guys in Monsters:
         if guys[0] < -75 or guys[2] <= 0:
             Monsters.pop(index)
-        guys[0] -= 2
+        if distance(guys[0], guys[1], lolx, loly) <= 400 and distance(guys[0], guys[1], lolx, loly) >= 200:
+            if guys[0] - lolx != 0:
+                ang = math.tan((guys[1] - loly) / (guys[0] - lolx))
+            guys[0] -= 2 * cos(ang)
+            guys[1] -= 2 * sin(ang)
+        if distance(guys[0], guys[1], lolx, loly) > 400:
+            guys[0] -= 2
+        if distance(guys[0], guys[1], lolx, loly) <= 200:
+            if guys[3] == 0:
+                if guys[0] + 37.5 - lolx - 50 != 0:
+                    angl = tan((guys[1] + 37.5 - loly - 50)/(guys[0] + 37.5 - lolx - 50))
+                else:
+                    angl = 0
+                Mons.append([guys[0] + 37.5 - 12.5, guys[1] + 37.5 - 12.5, angl])
+                guys[3] = 100
         guyRect = pygame.Rect(Monster.get_rect())
         guyRect.left = guys[0]
         guyRect.top = guys[1]
@@ -144,10 +177,16 @@ while 1:
                 Abilityk_x[skill] = 1000
                 Abilityk_y[skill] = 600
         index += 1
-        
+
+    
+    healthlength = 496 * lolHP / totalHP
+    
     for guys in Monsters:
         screen.blit(Monster, (guys[0], guys[1]))
-
+        if guys[3] != 0:
+            guys[3] -= 1
+    for m in Mons:
+        screen.blit(Monst, (m[0], m[1]))
     for g in listg:
         minimum = 250
         for guys in Monsters:
@@ -169,7 +208,8 @@ while 1:
             guyRect.top = guys[1]
             if gRect.colliderect(guyRect):
                 guys[2] -= 100
-                listg.pop(index1)
+                if listg != []:
+                    listg.pop(index1)
         index1 += 1
             
     
@@ -231,6 +271,17 @@ while 1:
                 key[2] = False
             if event.key == K_d:
                 key[3] = False
+    lolcolliderect = pygame.Rect(lolx + 25, loly + 25, 50, 50)
+    index3 = 0
+    for m in Mons:
+        mRect = pygame.Rect(m[0], m[1], 25, 25)
+        if lolcolliderect.colliderect(mRect):
+            Mons.pop(index3)
+            lolHP -= 200
+        else:
+            m[0] -= 3 * cos(m[2])
+            m[1] -= 3 * sin(m[2])
+        index3 += 1
                 
     if lolx < 0:
         lolx = 0
@@ -298,6 +349,7 @@ while 1:
     Abilityl_cd = font.render(str(cd_l//1000+1).zfill(2), True, (255, 255, 255))
     textlRect = Abilityl_cd.get_rect()
     textlRect.center = (Ability_l.get_width()*7/2, screen.get_height()-Ability_l.get_height()/2)
+    
     if cd_h > 0:
         Ability_h.set_alpha(150)
         cd_h = cdh - (pygame.time.get_ticks() - time_h)
@@ -337,15 +389,20 @@ while 1:
         cd_l = 0
         Ability_l.set_alpha(255)
         cdreductionl = 0
-
+    if lolHP > 0: 
+        pygame.draw.line(screen,(255,0,0), (252, 560), (252 + healthlength, 560), 16)
+    healthtext = font.render(str(lolHP) + "/" + str(totalHP).zfill(2), True, (0, 0, 0))
+    healthrect = healthtext.get_rect()
+    healthrect.center = (500, 560)
+    screen.blit(healthtext, healthrect)
     badtimer -= 2
     pygame.display.flip()
+
     
-        
-        
+
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit(0)
-    pygame.display.flip()
+        pygame.display.flip()
