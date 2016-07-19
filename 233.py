@@ -16,15 +16,15 @@ key = [False, False, False, False]
 
 #Load images
 Ez = pygame.image.load("images/ez.jpg")
-G = pygame.image.load("images/G.jpg")
-H = pygame.image.load("images/H.jpg")
-J = pygame.image.load("images/J.jpg")
-K1 = pygame.image.load("images/K1.png")
-K2 = pygame.image.load("images/K2.jpg")
-L1 = pygame.image.load("images/L1.png")
-L2 = pygame.image.load("images/L2.jpg")
+G = pygame.image.load("images/ez_G.jpg")
+H = pygame.image.load("images/ez_H.jpg")
+J = pygame.image.load("images/ez_J.jpg")
+K1 = pygame.image.load("images/ez_K1.png")
+K2 = pygame.image.load("images/ez_K2.jpg")
+L1 = pygame.image.load("images/ez_L1.png")
+L2 = pygame.image.load("images/ez_L2.jpg")
 M = pygame.image.load("images/Monster.png")
-H_ex = pygame.image.load("images/H-explode.png")
+H_ex = pygame.image.load("images/ez_H-explode.png")
 Bg = pygame.image.load("images/bg.png")
 Mon = pygame.image.load("images/Mons.png")
 defeat = pygame.image.load("images/defeat.png")
@@ -58,8 +58,8 @@ Abilityh_x = 1000
 Abilityh_y = 600
 Abilityk_x = [1000, 1000, 1000, 1000, 1000, 1000, 1000]
 Abilityk_y = [600, 600, 600, 600, 600, 600, 600]
-Abilityl_x = 1000
-Abilityl_y = 600
+Abilityl_x = 10000
+Abilityl_y = 6000
 defeatRect = defeat.get_rect()
 defeatRect.center = (500, 300)
 levelRect = level.get_rect()
@@ -69,8 +69,8 @@ lolx = 100
 loly = 100
 def Fibonacci(x):
     a1 = 1
-    a2 = 1
-    a3 = 2
+    a2 = 2
+    a3 = 3
     for i in range(x - 1):
         a3 = a1 + a2
         a1 = a2
@@ -173,7 +173,7 @@ while 1:
         if guys[2] <= 0:
             score += 100
             Monsters.pop(index)
-            Exp +=10
+            Exp += 10
         if distance(guys[0], guys[1], lolx, loly) <= 400 and distance(guys[0], guys[1], lolx, loly) >= 200:
             if guys[0] - lolx != 0:
                 ang = math.tan((guys[1] - loly) / (guys[0] - lolx))
@@ -347,6 +347,9 @@ while 1:
         b = 0
     if Abilityh_x < 1000:
         Abilityh_x += 20
+    else:
+        Abilityh_x = 10000
+        Abilityh_y = 6000
     for skill in range(7):
         if Abilityk_x[skill] < 1000 and Abilityk_y[skill] < 600:
             if skill == 0:
@@ -373,6 +376,8 @@ while 1:
         Abilityl_x += 20
     else:
         dmg_l = 800
+        Abilityl_x = 10000
+        Abilityl_y = 6000
 
     if Exp >= Fibonacci(Lv):
         Lv += 1
@@ -437,17 +442,18 @@ while 1:
         cdreductionl = 0
     if lolHP > 0: 
         pygame.draw.line(screen,(255,0,0), (252, 560), (252 + healthlength, 560), 16)
+    if lolHP < 0:
+        lolHP = 0
     healthtext = font.render(str(lolHP) + "/" + str(totalHP).zfill(2), True, (0, 0, 0))
     healthrect = healthtext.get_rect()
     healthrect.center = (500, 560)
     screen.blit(healthtext, healthrect)
     badtimer -= 2
     pygame.display.flip()
-
     
 
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit(0)
+
+for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+        pygame.quit()
+        exit(0)
