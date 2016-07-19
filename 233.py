@@ -124,7 +124,7 @@ cdreductionl = 0
 ang = 0
 healthRect = (250, 550, 500, 20)
 healthlength = 496
-totalHP = 10000
+totalHP = 200
 lolHP = totalHP
 for i in range(7):
     listk.append((i, i))
@@ -290,8 +290,8 @@ while 1:
                     for skill in range(7):
                         Abilityk_x[skill] = lolx + 100
                         Abilityk_y[skill] = loly + 20
-                        time_k = pygame.time.get_ticks()
-                        cd_k = cdk
+                    time_k = pygame.time.get_ticks()
+                    cd_k = cdk
             elif event.key == K_l:
                 if cd_l == 0:
                     Abilityl_x = lolx + 10
