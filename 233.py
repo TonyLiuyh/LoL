@@ -124,7 +124,7 @@ cdreductionl = 0
 ang = 0
 healthRect = (250, 550, 500, 20)
 healthlength = 496
-totalHP = 200
+totalHP = 5000
 lolHP = totalHP
 for i in range(7):
     listk.append((i, i))
