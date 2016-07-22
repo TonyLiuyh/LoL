@@ -70,6 +70,9 @@ KORect.center = (650, 325)
 run = 1
 ez_score = 0
 lucian_score = 0
+cdreductionj = 0
+cdreductionk = 0
+cdreductionl = 0
 
 while 1:
     run = 1
@@ -96,12 +99,13 @@ while 1:
     screen.blit(Lucian, (LuPosition[0], LuPosition[1]))
     pygame.draw.rect(screen, (255, 255, 255), healthRect1, 0)
     pygame.draw.rect(screen, (255, 255, 255), healthRect2, 0)
+    screen.blit(ez_h, (0, 600))
+    screen.blit(ez_j, (50, 600))
+    screen.blit(ez_k, (100, 600))
+    screen.blit(ez_l, (150, 600))
 
 
-    screen.blit(Ez_h, (Ez_hPosition[0], Ez_hPosition[1]))
-    for skill in range(7):
-        screen.blit(Ez_k, (Ez_listkx[skill], Ez_listky[skill]))
-    screen.blit(Ez_l, (Ez_lPosition[0], Ez_lPosition[1]))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -121,7 +125,7 @@ while 1:
                     if Ez_cd[0] == 0:
                         Ez_listg.append([EzPosition[0] + 25, EzPosition[1] + 25, 0])
                         Ez_timeg = pygame.time.get_ticks()
-                        #Ez_cd[0] = Ezcd[0]                    
+                        Ez_cd[0] = Ezcd[0]                    
             elif event.key == K_4:
                 if Ez_cd[1] == 0:
                     Ez_hPosition[0] = EzPosition[0] + 25
@@ -143,7 +147,7 @@ while 1:
                         ez_cosh = 0 - cos(Ez_hPosition[2])
                         ez_sinh = 0 - sin(Ez_hPosition[2])
                     Ez_timeh = pygame.time.get_ticks()
-                    #Ez_cd[1] = Ezcd[1]
+                    Ez_cd[1] = Ezcd[1]
             elif event.key == K_5:
                 if Ez_cd[2] == 0:
                     P = pygame.mouse.get_pos()
@@ -185,7 +189,7 @@ while 1:
                         Ez_listkz[skill] = AngleK + (skill - 3) * math.pi / 9         
                     Ez_timek = pygame.time.get_ticks()
                     dmgk = 0
-                    #Ez_cd[3] = Ezcd[3]                                            
+                    Ez_cd[3] = Ezcd[3]                                            
             elif event.key == K_7:
                 if Ez_cd[4] == 0:
                     Ez_lPosition[0] = EzPosition[0]
@@ -375,6 +379,10 @@ while 1:
         screen.blit(Ez_g, (Ezg[0], Ezg[1]))
     for Lug in Lucian_listg:
         screen.blit(Lucian_g, (Lug[0], Lug[1]))
+    screen.blit(Ez_h, (Ez_hPosition[0], Ez_hPosition[1]))
+    for skill in range(7):
+        screen.blit(Ez_k, (Ez_listkx[skill], Ez_listky[skill]))
+    screen.blit(Ez_h, (Ez_hPosition[0], Ez_hPosition[1]))
     healthlength_p1 = 546 * ez_cHP / ez_tHP
     healthlength_p2 = 546 * lucian_cHP / lucian_tHP
     if ez_cHP > 0:
@@ -400,6 +408,11 @@ while 1:
         EzPosition = [100, 200]
         Ez_listg = []
         Lucian_listg = []
+        for skill in range(7):
+            Ez_listkx[skill] = 10000
+            Ez_listky[skill] = 10000
+            Ez_listkz[skill] = 0
+        Ez_hPosition = [10000, 10000, 0]
     if lucian_cHP <= 0:
         ez_cHP = ez_tHP
         lucian_cHP = lucian_tHP
@@ -419,6 +432,52 @@ while 1:
         EzPosition = [100, 200]
         Ez_listg = []
         Lucian_listg = []
+        for skill in range(7):
+            Ez_listkx[skill] = 10000
+            Ez_listky[skill] = 10000
+            Ez_listkz[skill] = 0
+        Ez_hPosition = [10000, 10000, 0]
+        
+    if Ez_cd[1] > 0:
+        ez_h.set_alpha(150)
+        Ez_cd[1] = Ezcd[1] - (pygame.time.get_ticks() - Ez_timeh)
+        #screen.blit(Abilityh_cd, ez_texthRect)
+    else:
+        Ez_cd[1] = 0
+        ez_h.set_alpha(255)
+
+    if Ez_cd[2] > 0:
+        ez_j.set_alpha(150)
+        Ez_cd[2] = Ezcd[2] - (pygame.time.get_ticks() - Ez_timej) - cdreductionj
+        #screen.blit(Abilityj_cd, textjRect)
+    else:
+        Ez_cd[2] = 0
+        ez_j.set_alpha(255)
+        cdreductionj = 0
+
+    if Ez_cd[3] > 0:
+        ez_k.set_alpha(150)
+        Ez_cd[3] = Ezcd[3] - (pygame.time.get_ticks() - Ez_timek) - cdreductionk
+        #screen.blit(Abilityk_cd, textkRect)
+    else:
+        Ez_cd[3] = 0
+        ez_k.set_alpha(255)
+        cdreductionk = 0
+
+    if Ez_cd[0] > 0:
+        Ez_cd[0] = Ezcd[0] - (pygame.time.get_ticks() - Ez_timeg)
+    else:
+        Ez_cd[0] = 0
+    
+    if Ez_cd[4] > 0:
+        ez_l.set_alpha(150)
+        Ez_cd[4] = Ezcd[4] - (pygame.time.get_ticks() - Ez_timel) - cdreductionl
+        #screen.blit(Abilityl_cd, textlRect)
+    else:
+        Ez_cd[4] = 0
+        ez_l.set_alpha(255)
+        cdreductionl = 0
+
     pygame.display.flip()
     
 

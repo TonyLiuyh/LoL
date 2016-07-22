@@ -9,7 +9,7 @@ import random
 pygame.init()
 
 #Create the screen
-screen = pygame.display.set_mode((1000, 600))
+screen = pygame.display.set_mode((1300, 650))
 
 #Definde key for moving
 key = [False, False, False, False]
@@ -39,7 +39,7 @@ Lv = 1
 #Vary the scale of images
 LOL = pygame.transform.scale(Ez, (100, 100))
 Monster = pygame.transform.scale(M, (75, 75))
-bg = pygame.transform.scale(Bg, (1000, 600))
+bg = pygame.transform.scale(Bg, (1300, 650))
 NormalAttack = pygame.transform.scale(G, (50, 50))
 Ability_h = pygame.transform.scale(H, (50, 50))
 Ability_j = pygame.transform.scale(J, (50, 50))
@@ -54,10 +54,10 @@ level = pygame.transform.scale(Level, (90, 90))
 #victory = pygame.transform.scale(Victory, (800, 670))
 
 #Set the initial values of images' positions
-Abilityh_x = 1000
-Abilityh_y = 600
-Abilityk_x = [1000, 1000, 1000, 1000, 1000, 1000, 1000]
-Abilityk_y = [600, 600, 600, 600, 600, 600, 600]
+Abilityh_x = 10000
+Abilityh_y = 6000
+Abilityk_x = [10000, 10000, 10000, 10000, 10000, 10000, 10000]
+Abilityk_y = [6000, 6000, 6000, 6000, 6000, 6000, 6000]
 Abilityl_x = 10000
 Abilityl_y = 6000
 defeatRect = defeat.get_rect()
@@ -122,7 +122,7 @@ cdreductionj = 0
 cdreductionk = 0
 cdreductionl = 0
 ang = 0
-healthRect = (250, 550, 500, 20)
+healthRect = (250, 600, 600, 20)
 healthlength = 496
 totalHP = 5000
 lolHP = totalHP
@@ -150,14 +150,14 @@ while 1:
     screen.blit(Levelnumber, lvRect)
     for skill in range(7):
         screen.blit(Skill_k, (Abilityk_x[skill], Abilityk_y[skill]))
-    screen.blit(Ability_h, (0, 550))
-    screen.blit(Ability_j, (50, 550))
-    screen.blit(Ability_k, (100, 550))
-    screen.blit(Ability_l, (150, 550))
+    screen.blit(Ability_h, (0, 600))
+    screen.blit(Ability_j, (50, 600))
+    screen.blit(Ability_k, (100, 600))
+    screen.blit(Ability_l, (150, 600))
     for g in listg:
         screen.blit(NormalAttack, (g[0], g[1]))
     if badtimer==0:
-        Monsters.append([1000, random.randint(0,475), MonHp, 0])
+        Monsters.append([1300, random.randint(0,525), MonHp, 0])
         badtimer=100
     index = 0
     index1 = 0
@@ -196,8 +196,8 @@ while 1:
             exRect = H_explode.get_rect()
             exRect.center = ((guyRect.center[0] + Abilityh_x + 50)/ 2, (guyRect.center[1] + Abilityh_y + 50)/ 2)
             guys[2] -= 700
-            Abilityh_x = 1000
-            Abilityh_y = 600
+            Abilityh_x = 10000
+            Abilityh_y = 6000
             time_ex = pygame.time.get_ticks()
             exist_ex = 500
             cdreductionj += 1000
@@ -214,12 +214,12 @@ while 1:
             kRect.top = Abilityk_y[skill]
             if kRect.colliderect(guyRect):
                 guys[2] -= 400
-                Abilityk_x[skill] = 1000
-                Abilityk_y[skill] = 600
+                Abilityk_x[skill] = 10000
+                Abilityk_y[skill] = 6000
         index += 1
 
     
-    healthlength = 496 * lolHP / totalHP
+    healthlength = 596 * lolHP / totalHP
     
     for guys in Monsters:
         screen.blit(Monster, (guys[0], guys[1]))
@@ -325,12 +325,12 @@ while 1:
                 
     if lolx < 0:
         lolx = 0
-    if lolx > 900:
-        lolx = 900
+    if lolx > 1200:
+        lolx = 1200
     if loly < 0:
         loly = 0
-    if loly > 450:
-        loly = 450
+    if loly > 500:
+        loly = 500
     if key[0] == True:
         loly -= 4
     if key[1] == True:
@@ -345,13 +345,13 @@ while 1:
     else:
         exist_ex = 0
         b = 0
-    if Abilityh_x < 1000:
+    if Abilityh_x < 1300:
         Abilityh_x += 20
     else:
         Abilityh_x = 10000
         Abilityh_y = 6000
     for skill in range(7):
-        if Abilityk_x[skill] < 1000 and Abilityk_y[skill] < 600:
+        if Abilityk_x[skill] < 1300 and Abilityk_y[skill] < 650:
             if skill == 0:
                 Abilityk_x[skill] += 2 * 4
                 Abilityk_y[skill] -= 3.46 * 4
@@ -372,7 +372,7 @@ while 1:
             if skill == 6:
                 Abilityk_x[skill] += 2 * 4
                 Abilityk_y[skill] += 3.46 * 4
-    if Abilityl_x < 1000:
+    if Abilityl_x < 1300:
         Abilityl_x += 20
     else:
         dmg_l = 800
@@ -396,9 +396,9 @@ while 1:
     Abilityl_cd = font.render(str(cd_l//1000+1).zfill(2), True, (255, 255, 255))
     textlRect = Abilityl_cd.get_rect()
     textlRect.center = (Ability_l.get_width()*7/2, screen.get_height()-Ability_l.get_height()/2)
-    score_display= font.render("Score: " +str(score).zfill(2),True,(255,255,255))
+    score_display= font.render("Score: " +str(score).zfill(1),True,(255,255,255))
     scoreRect = score_display.get_rect()
-    scoreRect.center= (500,30)
+    scoreRect.center= (650,30)
     screen.blit(score_display, scoreRect)
     
     if cd_h > 0:
@@ -441,12 +441,12 @@ while 1:
         Ability_l.set_alpha(255)
         cdreductionl = 0
     if lolHP > 0: 
-        pygame.draw.line(screen,(255,0,0), (252, 560), (252 + healthlength, 560), 16)
+        pygame.draw.line(screen,(255,0,0), (252, 610), (252 + healthlength, 610), 16)
     if lolHP < 0:
         lolHP = 0
-    healthtext = font.render(str(lolHP) + "/" + str(totalHP).zfill(2), True, (0, 0, 0))
+    healthtext = font.render(str(lolHP) + "/" + str(totalHP).zfill(1), True, (0, 0, 0))
     healthrect = healthtext.get_rect()
-    healthrect.center = (500, 560)
+    healthrect.center = (560, 610)
     screen.blit(healthtext, healthrect)
     badtimer -= 2
     pygame.display.flip()
