@@ -530,6 +530,13 @@ def PVP():
     damageava = 1
     atk = 1
     dmgav = 1
+    draw = 0
+    draw2 = 0
+    Lu_jPosition = [10000, 10000, 0]
+    length = 0
+    DrawPos = [0, 0]
+    Lu_sinj = 0
+    Lu_cosj = 0
 
     while 1:
         run = 1
@@ -709,7 +716,27 @@ def PVP():
                                 Lucian_listhz[n] = n
                             atk = 1.5
                             damageava = 1
-    ##            elif event.key == 44:
+                elif event.key == 44:
+                    if Lucian_cd[2] == 0:
+                        a = LuPosition[0] - EzPosition[0]
+                        b = LuPosition[1] - EzPosition[1]
+                        Lu_jPosition[0] = LuPosition[0] + 25
+                        Lu_jPosition[1] = LuPosition[1] + 25
+                        if a != 0:
+                            Lu_jPosition[2] = atan(b / a)
+                        if a > 0 and b >= 0:
+                            Lu_cosj = cos(Lu_jPosition[2])
+                            Lu_sinj = sin(Lu_jPosition[2])
+                        if a > 0 and b <= 0:
+                            Lu_cosj = cos(Lu_jPosition[2])
+                            Lu_sinj = sin(Lu_jPosition[2])
+                        if a < 0 and b >= 0:
+                            Lu_cosj = 0 - cos(Lu_jPosition[2])
+                            Lu_sinj = 0 - sin(Lu_jPosition[2])
+                        if a < 0 and b <= 0:
+                            Lu_cosj = 0 - cos(Lu_jPosition[2])
+                            Lu_sinj = 0 - sin(Lu_jPosition[2])
+                    
     ##            elif event.key == 46:
     ##            elif event.key == 47:                
             if event.type == pygame.KEYUP:
@@ -775,6 +802,7 @@ def PVP():
             if dmgav == 1:
                 lucian_cHP -= 600
             dmgav = 0
+
         
         for skill in range(7):
             if Ez_listkx[skill] > -50 and Ez_listkx[skill] < 1300 and Ez_listky[skill] > -50 and Ez_listky[skill] < 1300:
@@ -888,6 +916,47 @@ def PVP():
                 if LuhRect.colliderect(EzCoRect) and Lucian_listhz[a] > -5 and Lucian_listhz[a] < 6:
                     ez_cHP -= 600
                     damageava = 0
+
+        if Lu_jPosition[0] > -50 and Lu_jPosition[0] < 1300 and Lu_jPosition[1] > -50 and Lu_jPosition[1] < 1300:
+            Lu_jPosition[0] -= Lu_cosj * 20
+            Lu_jPosition[1] -= Lu_sinj * 20
+            length += 1
+        else:
+            Lu_jPosition = [10000, 10000, 0]
+            length = 0
+            
+        if Rect(Lu_jPosition[0], Lu_jPosition[1], 50, 50).colliderect(EzCoRect):
+            ez_cHP -= 300
+            DrawPos[0] = Lu_jPosition[0]
+            DrawPos[1] = Lu_jPosition[1]
+            Lu_jPosition[0] = 10000
+            Lu_jPosition[1] = 10000
+            Lu_jPosition[2] = 0
+            draw = 1
+            length = 0
+        elif length >= 30:
+            DrawPos[0] = Lu_jPosition[0]
+            DrawPos[1] = Lu_jPosition[1]
+            Lu_jPosition[0] = 10000
+            Lu_jPosition[1] = 10000
+            Lu_jPosition[2] = 0
+            draw = 1
+            length = 0
+            
+        if draw == 1:
+            if draw2 < 10:
+                for r in range(8):
+                    if r - draw2 > 0 and r - draw2 < 5:
+                        screen.blit(Lucian_j, (DrawPos[0] + r * Lu_cosj * 20, DrawPos[1] + r * Lu_sinj * 20))
+                        screen.blit(Lucian_j, (DrawPos[0] + r * Lu_sinj * 20, DrawPos[1] - r * Lu_cosj * 20))
+                        screen.blit(Lucian_j, (DrawPos[0] - r * Lu_cosj * 20, DrawPos[1] - r * Lu_sinj * 20))
+                        screen.blit(Lucian_j, (DrawPos[0] - r * Lu_sinj * 20, DrawPos[1] + r * Lu_cosj * 20))
+                draw2 += 1
+            else:
+                draw2 = 0
+                draw = 0
+
+
             
             
         font = pygame.font.Font(None, 48)
@@ -910,6 +979,7 @@ def PVP():
                 Lucian_listhz[skill] -= 1
         screen.blit(Ez_h, (Ez_hPosition[0], Ez_hPosition[1]))
         screen.blit(Ez_l, (Ez_lPosition[0], Ez_lPosition[1]))
+        screen.blit(Lucian_j, (Lu_jPosition[0], Lu_jPosition[1]))
         healthlength_p1 = 546 * ez_cHP / ez_tHP
         healthlength_p2 = 546 * lucian_cHP / lucian_tHP
         if ez_cHP > 0:
