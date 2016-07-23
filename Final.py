@@ -21,7 +21,6 @@ HowlingAbyss = pygame.transform.scale(pygame.image.load("images/Howling_Abyss.jp
 def P():
     key = [False, False, False, False]
 
-    #Load images
     Ez = pygame.image.load("images/ez.jpg")
     G = pygame.image.load("images/ez_G.jpg")
     H = pygame.image.load("images/ez_H.jpg")
@@ -41,9 +40,7 @@ def P():
     score=0
     Exp=0
     Lv = 1
-    #Victory = pygame.image.load("images/victory.png")
 
-    #Vary the scale of images
     LOL = pygame.transform.scale(Ez, (100, 100))
     Monster = pygame.transform.scale(M, (75, 75))
     bg = pygame.transform.scale(Bg, (1300, 650))
@@ -58,9 +55,7 @@ def P():
     H_explode = pygame.transform.scale(H_ex, (75, 75))
     Monst = pygame.transform.scale(Mon, (25, 25))
     level = pygame.transform.scale(Level, (90, 90))
-    #victory = pygame.transform.scale(Victory, (800, 670))
 
-    #Set the initial values of images' positions
     Abilityh_x = 10000
     Abilityh_y = 6000
     Abilityk_x = [10000, 10000, 10000, 10000, 10000, 10000, 10000]
@@ -70,8 +65,7 @@ def P():
     defeatRect = defeat.get_rect()
     defeatRect.center = (500, 300)
     levelRect = level.get_rect()
-    #victoryRect = victory.get_rect()
-    #victoryRect.center = (500, 300)
+
     lolx = 100
     loly = 100
     def Fibonacci(x):
@@ -84,7 +78,6 @@ def P():
             a2 = a3
         return(a3 * 10)
 
-    #Set the cooldown time
     cd_g = 0
     cd_h = 0
     cd_j = 0
@@ -106,7 +99,6 @@ def P():
         atkrate = 10
     zhengchangmoshi()
 
-    #Distance function
     def distance(x1, y1, x2, y2):
         return(math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1) * (y2 - y1)))
         
@@ -469,7 +461,8 @@ def PVP():
     key1 = [False, False, False, False]
     key2 = [False, False, False, False]
 
-
+    Ez_cdtext = [0, 0, 0, 0, 0]
+    Ez_cdRect = [0, 0, 0, 0, 0]
     ez_tHP = 5000
     ez_cHP = ez_tHP
 
@@ -511,6 +504,9 @@ def PVP():
     Lucian_h = lucian_h
     Lucian_j = lucian_j
     Lucian_l = lucian_l
+    Lucian_listhx = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
+    Lucian_listhy = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
+    Lucian_listhz = [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5]
     Lucian_cd = [0, 0, 0, 0, 0]
     Luciancd = Lucian_cd
     Lucian_listg = []
@@ -531,6 +527,9 @@ def PVP():
     cdreductionj = 0
     cdreductionk = 0
     cdreductionl = 0
+    damageava = 1
+    atk = 1
+    dmgav = 1
 
     while 1:
         run = 1
@@ -650,10 +649,27 @@ def PVP():
                         Ez_cd[3] = Ezcd[3]                                            
                 elif event.key == K_7:
                     if Ez_cd[4] == 0:
-                        Ez_lPosition[0] = EzPosition[0]
-                        Ez_lPosition[1] = EzPosition[1]
+                        Ez_lPosition[0] = EzPosition[0] + 10
+                        Ez_lPosition[1] = EzPosition[1] + 10
                         Ez_timel = pygame.time.get_ticks()
                         Ez_cd[4] = Ezcd[4]
+                        a = LuPosition[0] - EzPosition[0]
+                        b = LuPosition[1] - EzPosition[1]
+                        if a != 0:
+                            Ez_lPosition[2] = atan(b / a)
+                        if a > 0 and b >= 0:
+                            ez_cosl = cos(Ez_lPosition[2])
+                            ez_sinl = sin(Ez_lPosition[2])
+                        if a > 0 and b <= 0:
+                            ez_cosl = cos(Ez_lPosition[2])
+                            ez_sinl = sin(Ez_lPosition[2])
+                        if a < 0 and b >= 0:
+                            ez_cosl = 0 - cos(Ez_lPosition[2])
+                            ez_sinl = 0 - sin(Ez_lPosition[2])
+                        if a < 0 and b <= 0:
+                            ez_cosl = 0 - cos(Ez_lPosition[2])
+                            ez_sinl = 0 - sin(Ez_lPosition[2])
+                        dmgav = 1
                 
                 elif event.key == K_UP:
                     key2[0] = True
@@ -668,7 +684,31 @@ def PVP():
                         if Lucian_cd[0] == 0:
                             Lucian_listg.append([LuPosition[0] + 25, LuPosition[1] + 25, 0])
                             Lucian_timeg = pygame.time.get_ticks()                
-    ##            elif event.key == 109:
+                elif event.key == 109:
+                    if (EzPosition[0] - LuPosition[0]) ** 2 + (EzPosition[1] - LuPosition[1]) ** 2 <= 360000:
+                        if Lucian_cd[1] == 0:
+                            a = LuPosition[0] - EzPosition[0]
+                            b = LuPosition[1] - EzPosition[1]
+                            if a != 0:
+                                Lu_angleh = atan(b / a)
+                            if a > 0 and b >= 0:
+                                Lu_cosh = cos(Lu_angleh)
+                                Lu_sinh = sin(Lu_angleh)
+                            if a > 0 and b <= 0:
+                                Lu_cosh = cos(Lu_angleh)
+                                Lu_sinh = sin(Lu_angleh)
+                            if a < 0 and b >= 0:
+                                Lu_cosh = 0 - cos(Lu_angleh)
+                                Lu_sinh = 0 - sin(Lu_angleh)
+                            if a < 0 and b <= 0:
+                                Lu_cosh = 0 - cos(Lu_angleh)
+                                Lu_sinh = 0 - sin(Lu_angleh)
+                            for n in range(15):
+                                Lucian_listhx[n] = LuPosition[0] + 25 - Lu_cosh * n * 50
+                                Lucian_listhy[n] = LuPosition[1] + 25 - Lu_sinh * n * 50
+                                Lucian_listhz[n] = n
+                            atk = 1.5
+                            damageava = 1
     ##            elif event.key == 44:
     ##            elif event.key == 46:
     ##            elif event.key == 47:                
@@ -722,9 +762,19 @@ def PVP():
             Ez_hPosition[0] = 10000
             Ez_hPosition[1] = 10000
             Ez_hPosition[2] = 0
-            
-        EzCoRect = (EzPosition[0] + 25, EzPosition[1] + 25, 50, 50)
-        LuCoRect = (LuPosition[0] + 25, LuPosition[1] + 25, 50, 50)
+
+        if Ez_lPosition[0] > -80 and Ez_lPosition[0] < 1300 and Ez_lPosition[1] > -80 and Ez_lPosition[1] < 650:
+            Ez_lPosition[0] += ez_cosl * 30
+            Ez_lPosition[1] += ez_sinl * 30
+        else:
+            Ez_lPosition[0] = 10000
+            Ez_lPosition[1] = 10000
+            Ez_lPosition[2] = 0
+            dmgav = 1
+        if pygame.Rect(Ez_lPosition[0], Ez_lPosition[1], 80, 80).colliderect(LuCoRect):
+            if dmgav == 1:
+                lucian_cHP -= 600
+            dmgav = 0
         
         for skill in range(7):
             if Ez_listkx[skill] > -50 and Ez_listkx[skill] < 1300 and Ez_listky[skill] > -50 and Ez_listky[skill] < 1300:
@@ -826,8 +876,20 @@ def PVP():
             LugRect.top = Lug[1]
             if LugRect.colliderect(EzCoRect):
                 Lucian_listg.pop(index1)
-                ez_cHP -= 100
+                ez_cHP -= 100 * atk
+                atk = 1
             index1 += 1
+            
+        for a in range(15):
+            LuhRect = Lucian_h.get_rect()
+            LuhRect.left = Lucian_listhx[a]
+            LuhRect.top = Lucian_listhy[a]
+            if damageava == 1:
+                if LuhRect.colliderect(EzCoRect) and Lucian_listhz[a] > -5 and Lucian_listhz[a] < 6:
+                    ez_cHP -= 600
+                    damageava = 0
+            
+            
         font = pygame.font.Font(None, 48)
         Score = font.render(str(int(ez_score))+" : "+ str(int(lucian_score)).zfill(1), True, (255, 255, 255))
         ScoreRect = Score.get_rect()
@@ -840,13 +902,67 @@ def PVP():
         screen.blit(Ez_h, (Ez_hPosition[0], Ez_hPosition[1]))
         for skill in range(7):
             screen.blit(Ez_k, (Ez_listkx[skill], Ez_listky[skill]))
+        for skill in range(15):
+            if Lucian_listhz[skill] + 5 > 0 and Lucian_listhz[skill] + 5 < 11:
+                screen.blit(Lucian_h, (Lucian_listhx[skill], Lucian_listhy[skill]))
+                Lucian_listhz[skill] -= 1
+            if Lucian_listhz[skill] + 5 >= 11:
+                Lucian_listhz[skill] -= 1
         screen.blit(Ez_h, (Ez_hPosition[0], Ez_hPosition[1]))
+        screen.blit(Ez_l, (Ez_lPosition[0], Ez_lPosition[1]))
         healthlength_p1 = 546 * ez_cHP / ez_tHP
         healthlength_p2 = 546 * lucian_cHP / lucian_tHP
         if ez_cHP > 0:
             pygame.draw.line(screen, (255, 0, 0), (12, 25), (12 + healthlength_p1, 25), 26)
         if lucian_cHP > 0:
             pygame.draw.line(screen, (255, 0, 0), (1288 - healthlength_p2, 25), (1288, 25), 26)
+
+        font2 = pygame.font.Font(None, 36)
+        for a in range(5):
+            Ez_cdtext[a] = font2.render(str(Ez_cd[a]//1000 + 1), True, (255, 255, 255))
+            Ez_cdRect[a] = Ez_cdtext[a].get_rect()
+            Ez_cdRect[a].center = (-25 + 50 * a, 627)
+
+        if Ez_cd[1] > 0:
+            ez_h.set_alpha(150)
+            Ez_cd[1] = Ezcd[1] - (pygame.time.get_ticks() - Ez_timeh)
+            screen.blit(Ez_cdtext[1], Ez_cdRect[1])
+        else:
+            Ez_cd[1] = 0
+            ez_h.set_alpha(255)
+
+        if Ez_cd[2] > 0:
+            ez_j.set_alpha(150)
+            Ez_cd[2] = Ezcd[2] - (pygame.time.get_ticks() - Ez_timej) - cdreductionj
+            screen.blit(Ez_cdtext[2], Ez_cdRect[2])
+        else:
+            Ez_cd[2] = 0
+            ez_j.set_alpha(255)
+            cdreductionj = 0
+
+        if Ez_cd[3] > 0:
+            ez_k.set_alpha(150)
+            Ez_cd[3] = Ezcd[3] - (pygame.time.get_ticks() - Ez_timek) - cdreductionk
+            screen.blit(Ez_cdtext[3], Ez_cdRect[3])
+        else:
+            Ez_cd[3] = 0
+            ez_k.set_alpha(255)
+            cdreductionk = 0
+
+        if Ez_cd[0] > 0:
+            Ez_cd[0] = Ezcd[0] - (pygame.time.get_ticks() - Ez_timeg)
+        else:
+            Ez_cd[0] = 0
+        
+        if Ez_cd[4] > 0:
+            ez_l.set_alpha(150)
+            Ez_cd[4] = Ezcd[4] - (pygame.time.get_ticks() - Ez_timel) - cdreductionl
+            screen.blit(Ez_cdtext[4], Ez_cdRect[4])
+        else:
+            Ez_cd[4] = 0
+            ez_l.set_alpha(255)
+            cdreductionl = 0
+
         if ez_cHP <= 0:
             ez_cHP = ez_tHP
             lucian_cHP = lucian_tHP
@@ -864,8 +980,15 @@ def PVP():
                         exit()
             LuPosition = [1000, 200]
             EzPosition = [100, 200]
+            Lucian_listhx = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
+            Lucian_listhy = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
+            Lucian_listhz = [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5]
+            damageava = 1
+            atk = 1
             Ez_listg = []
             Lucian_listg = []
+            Ez_cd = [0, 0, 0, 0, 0]
+            Lucian_cd = [0, 0, 0, 0, 0]
             for skill in range(7):
                 Ez_listkx[skill] = 10000
                 Ez_listky[skill] = 10000
@@ -886,8 +1009,15 @@ def PVP():
                     if event.type == QUIT:
                         pygame.quit()
                         exit()
+            Lucian_listhx = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
+            Lucian_listhy = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
+            Lucian_listhz = [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5]
+            damageava = 1
+            atk = 1
             LuPosition = [1000, 200]
             EzPosition = [100, 200]
+            Ez_cd = [0, 0, 0, 0, 0]
+            Lucian_cd = [0, 0, 0, 0, 0]
             Ez_listg = []
             Lucian_listg = []
             for skill in range(7):
@@ -896,47 +1026,13 @@ def PVP():
                 Ez_listkz[skill] = 0
             Ez_hPosition = [10000, 10000, 0]
             
-        if Ez_cd[1] > 0:
-            ez_h.set_alpha(150)
-            Ez_cd[1] = Ezcd[1] - (pygame.time.get_ticks() - Ez_timeh)
-            #screen.blit(Abilityh_cd, ez_texthRect)
-        else:
-            Ez_cd[1] = 0
-            ez_h.set_alpha(255)
 
-        if Ez_cd[2] > 0:
-            ez_j.set_alpha(150)
-            Ez_cd[2] = Ezcd[2] - (pygame.time.get_ticks() - Ez_timej) - cdreductionj
-            #screen.blit(Abilityj_cd, textjRect)
-        else:
-            Ez_cd[2] = 0
-            ez_j.set_alpha(255)
-            cdreductionj = 0
 
-        if Ez_cd[3] > 0:
-            ez_k.set_alpha(150)
-            Ez_cd[3] = Ezcd[3] - (pygame.time.get_ticks() - Ez_timek) - cdreductionk
-            #screen.blit(Abilityk_cd, textkRect)
-        else:
-            Ez_cd[3] = 0
-            ez_k.set_alpha(255)
-            cdreductionk = 0
 
-        if Ez_cd[0] > 0:
-            Ez_cd[0] = Ezcd[0] - (pygame.time.get_ticks() - Ez_timeg)
-        else:
-            Ez_cd[0] = 0
-        
-        if Ez_cd[4] > 0:
-            ez_l.set_alpha(150)
-            Ez_cd[4] = Ezcd[4] - (pygame.time.get_ticks() - Ez_timel) - cdreductionl
-            #screen.blit(Abilityl_cd, textlRect)
-        else:
-            Ez_cd[4] = 0
-            ez_l.set_alpha(255)
-            cdreductionl = 0
 
         pygame.display.flip()
+
+
 
 bt1 = 0
 bt2 = 0
