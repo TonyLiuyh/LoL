@@ -503,12 +503,12 @@ def PVP():
     lucian_l = pygame.transform.scale(pygame.image.load("images/Lucian_L.png"), (50, 50))
     Lucian_h = lucian_h
     Lucian_j = lucian_j
-    Lucian_l = lucian_l
+    Lucian_l = pygame.transform.scale(pygame.image.load("images/Lucian_L.png"), (60, 60))
     Lucian_listhx = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
     Lucian_listhy = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
     Lucian_listhz = [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5]
     Lucian_cd = [0, 0, 0, 0, 0]
-    Luciancd = Lucian_cd
+    Luciancd = [1000, 5000, 7000, 10000, 30000]
     Lucian_listg = []
     LuPosition = [1000, 200]
     LuSpeed = 4
@@ -537,6 +537,10 @@ def PVP():
     DrawPos = [0, 0]
     Lu_sinj = 0
     Lu_cosj = 0
+    lav = 0
+    ltimer = 26
+    Lucian_listl = []
+    keycontrol = 0
 
     while 1:
         run = 1
@@ -567,6 +571,10 @@ def PVP():
         screen.blit(ez_j, (50, 600))
         screen.blit(ez_k, (100, 600))
         screen.blit(ez_l, (150, 600))
+        screen.blit(lucian_h, (1100, 600))
+        screen.blit(lucian_j, (1150, 600))
+        screen.blit(lucian_k, (1200, 600))
+        screen.blit(lucian_l, (1250, 600))
 
 
 
@@ -686,14 +694,17 @@ def PVP():
                     key2[2] = True
                 elif event.key == K_RIGHT:
                     key2[3] = True
-                elif event.key == K_n:
+                elif event.key == K_n and keycontrol == 0:
                     if (EzPosition[0] - LuPosition[0]) ** 2 + (EzPosition[1] - LuPosition[1]) ** 2 <= 360000:
                         if Lucian_cd[0] == 0:
                             Lucian_listg.append([LuPosition[0] + 25, LuPosition[1] + 25, 0])
-                            Lucian_timeg = pygame.time.get_ticks()                
-                elif event.key == 109:
+                            Lucian_timeg = pygame.time.get_ticks()
+                            Lu_timeg = pygame.time.get_ticks()
+                elif event.key == 109 and keycontrol == 0:
                     if (EzPosition[0] - LuPosition[0]) ** 2 + (EzPosition[1] - LuPosition[1]) ** 2 <= 360000:
+                        print('M1')
                         if Lucian_cd[1] == 0:
+                            print('M2')
                             a = LuPosition[0] - EzPosition[0]
                             b = LuPosition[1] - EzPosition[1]
                             if a != 0:
@@ -716,7 +727,9 @@ def PVP():
                                 Lucian_listhz[n] = n
                             atk = 1.5
                             damageava = 1
-                elif event.key == 44:
+                    print("M")
+                elif event.key == 44 and keycontrol == 0:
+                    print(",")
                     if Lucian_cd[2] == 0:
                         a = LuPosition[0] - EzPosition[0]
                         b = LuPosition[1] - EzPosition[1]
@@ -736,9 +749,61 @@ def PVP():
                         if a < 0 and b <= 0:
                             Lu_cosj = 0 - cos(Lu_jPosition[2])
                             Lu_sinj = 0 - sin(Lu_jPosition[2])
+                        dmgavj = 1
+                        Lu_timeh = pygame.time.get_ticks()
+                        Lucian_cd[1] = Luciancd[1]
                     
-    ##            elif event.key == 46:
-    ##            elif event.key == 47:                
+                elif event.key == 46:
+                    if Lucian_cd[3] == 0:
+                        P = pygame.mouse.get_pos()
+                        if P[0] - LuPosition[0] != 0:
+                            a = P[1] - LuPosition[1] - 50
+                            b = P[0] - LuPosition[0] - 50
+                            if b != 0:
+                                angle266 = math.atan(math.sqrt((a*a) / (b*b)))
+                            if a >= 0 and b > 0:
+                                LuPosition[0] += cos(angle266) * 300
+                                LuPosition[1] += sin(angle266) * 300
+                            if a >= 0 and b < 0:
+                                LuPosition[0] -= cos(angle266) * 300
+                                LuPosition[1] += sin(angle266) * 300
+                            if a <= 0 and b > 0:
+                                LuPosition[0] += cos(angle266) * 300
+                                LuPosition[1] -= sin(angle266) * 300
+                            if a <= 0 and b < 0:
+                                LuPosition[0] -= cos(angle266) * 300
+                                LuPosition[1] -= sin(angle266) * 300
+                        else:
+                            if P[1] < LuPosition[1]:
+                                LuPosition[1] -= 300
+                            else:
+                                LuPosition[1] += 300
+                        Lu_timej = pygame.time.get_ticks()
+                        Lucian_cd[2] = Luciancd[2]
+                    
+                elif event.key == 47:
+                    if Lucian_cd[4] == 0:
+                        a = LuPosition[0] - EzPosition[0]
+                        b = LuPosition[1] - EzPosition[1]
+                        if a != 0:
+                            anglel = atan(b / a)
+                        if a > 0 and b >= 0:
+                            Lu_cosl = cos(anglel)
+                            Lu_sinl = sin(anglel)
+                        if a > 0 and b <= 0:
+                            Lu_cosl = cos(anglel)
+                            Lu_sinl = sin(anglel)
+                        if a < 0 and b >= 0:
+                            Lu_cosl = 0 - cos(anglel)
+                            Lu_sinl = 0 - sin(anglel)
+                        if a < 0 and b <= 0:
+                            Lu_cosl = 0 - cos(anglel)
+                            Lu_sinl = 0 - sin(anglel)
+                        ltimer = 0
+                        lav = 1
+                        keycontrol = 1
+ 
+                        
             if event.type == pygame.KEYUP:
                 if event.key == K_w:
                     key1[0] = False
@@ -757,6 +822,21 @@ def PVP():
                     key2[2] = False
                 elif event.key == K_RIGHT:
                     key2[3] = False
+
+
+        if ltimer <= 25:
+            if ltimer % 2 == 0:
+                Lucian_listl.append([LuPosition[0] - 20 * Lu_sinl + 25, LuPosition[1] + 20 * Lu_cosl + 25])
+            if ltimer % 2 == 1:
+                Lucian_listl.append([LuPosition[0] + 20 * Lu_sinl + 25, LuPosition[1] - 20 * Lu_cosl + 25])
+        else:
+            lav = 0
+            keycontrol = 0
+
+
+        if lav == 1:
+            ltimer += 0.25
+                
         if key1[0] == True:
             EzPosition[1] -= EzSpeed
         if key1[1] == True:
@@ -877,7 +957,7 @@ def PVP():
                 Ez_listg.pop(index)
                 lucian_cHP -= 100
             index += 1
-        index1 = 0
+        indexg = 0
 
         
         for Lug in Lucian_listg:
@@ -903,11 +983,13 @@ def PVP():
             LugRect.left = Lug[0]
             LugRect.top = Lug[1]
             if LugRect.colliderect(EzCoRect):
-                Lucian_listg.pop(index1)
+                Lucian_listg.pop(indexg)
                 ez_cHP -= 100 * atk
                 atk = 1
-            index1 += 1
-            
+            indexg += 1
+
+
+           
         for a in range(15):
             LuhRect = Lucian_h.get_rect()
             LuhRect.left = Lucian_listhx[a]
@@ -924,6 +1006,18 @@ def PVP():
         else:
             Lu_jPosition = [10000, 10000, 0]
             length = 0
+
+        indexl = 0
+        for sl in Lucian_listl:
+            if sl[0] > -50 and sl[0] < 1300 and sl[1] > -50 and sl[1] < 1300:
+                sl[0] -= 30 * Lu_cosl
+                sl[1] -= 30 * Lu_sinl
+            else:
+                Lucian_listl.pop(indexl)
+            if Rect(sl[0], sl[1], 60, 60).colliderect(EzCoRect):
+                Lucian_listl.pop(indexl)
+                ez_cHP -= 80
+            indexl += 1
             
         if Rect(Lu_jPosition[0], Lu_jPosition[1], 50, 50).colliderect(EzCoRect):
             ez_cHP -= 300
@@ -934,6 +1028,7 @@ def PVP():
             Lu_jPosition[2] = 0
             draw = 1
             length = 0
+            dmgavj = 0
         elif length >= 30:
             DrawPos[0] = Lu_jPosition[0]
             DrawPos[1] = Lu_jPosition[1]
@@ -951,7 +1046,19 @@ def PVP():
                         screen.blit(Lucian_j, (DrawPos[0] + r * Lu_sinj * 20, DrawPos[1] - r * Lu_cosj * 20))
                         screen.blit(Lucian_j, (DrawPos[0] - r * Lu_cosj * 20, DrawPos[1] - r * Lu_sinj * 20))
                         screen.blit(Lucian_j, (DrawPos[0] - r * Lu_sinj * 20, DrawPos[1] + r * Lu_cosj * 20))
-                draw2 += 1
+                        if Rect(DrawPos[0] + r * Lu_cosj * 20, DrawPos[1] + r * Lu_sinj * 20, 50, 50).colliderect(EzCoRect) and dmgavj == 1:
+                            ez_cHP -= 300
+                            dmgavj = 0
+                        if Rect(DrawPos[0] + r * Lu_cosj * 20, DrawPos[1] - r * Lu_sinj * 20, 50, 50).colliderect(EzCoRect) and dmgavj == 1:
+                            ez_cHP -= 300
+                            dmgavj = 0
+                        if Rect(DrawPos[0] - r * Lu_cosj * 20, DrawPos[1] - r * Lu_sinj * 20, 50, 50).colliderect(EzCoRect) and dmgavj == 1:
+                            ez_cHP -= 300
+                            dmgavj = 0
+                        if Rect(DrawPos[0] - r * Lu_cosj * 20, DrawPos[1] + r * Lu_sinj * 20, 50, 50).colliderect(EzCoRect) and dmgavj == 1:
+                            ez_cHP -= 300
+                            dmgavj = 0
+                draw2 += 0.5
             else:
                 draw2 = 0
                 draw = 0
@@ -982,6 +1089,8 @@ def PVP():
         screen.blit(Lucian_j, (Lu_jPosition[0], Lu_jPosition[1]))
         healthlength_p1 = 546 * ez_cHP / ez_tHP
         healthlength_p2 = 546 * lucian_cHP / lucian_tHP
+        for skilll in Lucian_listl:
+            screen.blit(Lucian_l, (skilll[0], skilll[1]))
         if ez_cHP > 0:
             pygame.draw.line(screen, (255, 0, 0), (12, 25), (12 + healthlength_p1, 25), 26)
         if lucian_cHP > 0:
