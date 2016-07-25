@@ -68,9 +68,9 @@ level = pygame.transform.scale(Level, (90, 90))
 
 LOL_2=Lucian
 NormalAttack_2=Lucian_g
-Ability_j_2=Lucian_j
-Ability_k_2=Lucian_k
-Ability_l_2=Lucian_l
+Ability_44=Lucian_j
+Ability_46=Lucian_k
+Ability_47=Lucian_l
 Lucian_cd = [0, 0, 0, 0, 0]
 Luciancd = Lucian_cd
 Lucian_listg = []
@@ -84,6 +84,12 @@ Abilityk_x = [1000, 1000, 1000, 1000, 1000, 1000, 1000]
 Abilityk_y = [600, 600, 600, 600, 600, 600, 600]
 Abilityl_x = 10000
 Abilityl_y = 6000
+Abilitym_x = 1000
+Abilitym_y = 600
+Ability46_x = [1000, 1000, 1000, 1000, 1000, 1000, 1000]
+Ability46_y = [600, 600, 600, 600, 600, 600, 600]
+Ability47_x = 10000
+Ability47_y = 6000
 defeatRect = defeat.get_rect()
 defeatRect.center = (500, 300)
 levelRect = level.get_rect()
@@ -159,9 +165,12 @@ dmg_l = 800
 cdreductionj = 0
 cdreductionk = 0
 cdreductionl = 0
+cdreduction44 = 0
+cdreduction46 = 0
+cdreduction47 = 0
 ang = 0
 healthRect = (250, 550, 500, 20)
-healthRect_2=(250,650 , 500,20)
+healthRect_2=(250, 580, 500, 20)
 healthlength = 496
 totalHP = 5000
 lolHP = totalHP
@@ -194,15 +203,15 @@ while 1:
         screen.blit(Levelnumber, lvRect)
     if lolHP_2>0:
         screen.blit(LOL_2, (lolx_2,loly_2))
-        levelRect.center = (lolx + 50, loly)
+        levelRect.center = (lolx_2 + 50, loly_2)
         screen.blit(level, levelRect)
-        screen.blit(Skill_h, (Abilityh_x, Abilityh_y))
-        screen.blit(Skill_l, (Abilityl_x, Abilityl_y))
-        font1 = pygame.font.Font(None, 36)
-        Levelnumber = font1.render(str(Lv).zfill(2),True,(255, 0, 0))
-        lvRect = Levelnumber.get_rect()
-        lvRect.center= (lolx + 50, loly + 5)
-        screen.blit(Levelnumber, lvRect)
+##        screen.blit(Skill_m, (Abilitym_x, Abilitym_y))
+##        screen.blit(Skill_47, (Ability47_x, Ability47_y))
+        
+        Levelnumber_2 = font1.render(str(Lv).zfill(2),True,(255, 0, 0))
+        lvRect_2 = Levelnumber_2.get_rect()
+        lvRect_2.center= (lolx_2 + 50, loly_2 + 5)
+        screen.blit(Levelnumber_2, lvRect_2)
     for skill in range(7):
         screen.blit(Skill_k, (Abilityk_x[skill], Abilityk_y[skill]))
     screen.blit(Ability_h, (0, 550))
@@ -250,6 +259,22 @@ while 1:
                     angl = 0
                 Mons.append([guys[0] + 37.5 - 12.5, guys[1] + 37.5 - 12.5, angl])
                 guys[3] = 100
+
+        if distance(guys[0], guys[1], lolx_2, loly_2) <= 400 and distance(guys[0], guys[1], lolx_2, loly_2) >= 200:
+            if guys[0] - lolx_2 != 0:
+                ang_2 = math.tan((guys[1] - loly_2) / (guys[0] - lolx_2))
+            guys[0] -= 2 * cos(ang_2)
+            guys[1] -= 2 * sin(ang_2)
+        if distance(guys[0], guys[1], lolx_2, loly_2) > 400:
+            guys[0] -= 2
+        if distance(guys[0], guys[1], lolx_2, loly_2) <= 200:
+            if guys[3] == 0:
+                if guys[0] + 37.5 - lolx - 50 != 0:
+                    angl = tan((guys[1] + 37.5 - loly - 50)/(guys[0] + 37.5 - lolx - 50))
+                else:
+                    angl = 0
+                Mons.append([guys[0] + 37.5 - 12.5, guys[1] + 37.5 - 12.5, angl])
+                guys[3] = 100
         guyRect = pygame.Rect(Monster.get_rect())
         guyRect.left = guys[0]
         guyRect.top = guys[1]
@@ -281,7 +306,7 @@ while 1:
 
     
     healthlength = 496 * lolHP / totalHP
-    healthlength2= 496* lolHP_2/totalHP
+    healthlength_2= 496* lolHP_2/totalHP
     for guys in Monsters:
         screen.blit(Monster, (guys[0], guys[1]))
         if guys[3] != 0:
@@ -559,14 +584,64 @@ while 1:
         cd_l = 0
         Ability_l.set_alpha(255)
         cdreductionl = 0
+
+    if cd_m > 0:
+        Ability_m.set_alpha(150)
+        cd_m = cdm - (pygame.time.get_ticks() - time_m)
+        screen.blit(Abilitym_cd, textmRect)
+    else:
+        cd_m = 0
+        Ability_h.set_alpha(255)
+
+    if cd_44 > 0:
+        Ability_j.set_alpha(150)
+        cd_44 = cd44 - (pygame.time.get_ticks() - time_44) - cdreduction44
+        screen.blit(Ability44_cd, text44Rect)
+    else:
+        cd_44 = 0
+        Ability_44.set_alpha(255)
+        cdreductionj = 0
+
+    if cd_46 > 0:
+        Ability_46.set_alpha(150)
+        cd_46 = cd46 - (pygame.time.get_ticks() - time_46) - cdreduction46
+        screen.blit(Ability46_cd, text46Rect)
+    else:
+        cd46 = 0
+        Ability_46.set_alpha(255)
+        cdreduction46 = 0
+
+    if cd_n > 0:
+        cd_n = cdn - (pygame.time.get_ticks() - time_n)
+    else:
+        cd_n = 0
+    
+    if cd_47 > 0:
+        Ability_47.set_alpha(150)
+        cd_47 = cd47 - (pygame.time.get_ticks() - time_47) - cdreduction47
+        screen.blit(Ability47_cd, text47Rect)
+    else:
+        cd_47 = 0
+        Ability_47.set_alpha(255)
+        cdreduction47 = 0 
     if lolHP > 0: 
         pygame.draw.line(screen,(255,0,0), (252, 560), (252 + healthlength, 560), 16)
     if lolHP < 0:
+        lolHP = 0
+
+    if lolHP_2 > 0: 
+        pygame.draw.line(screen,(255,0,0), (252, 590), (252 + healthlength_2, 590), 16)
+    if lolHP_2 < 0:
         lolHP = 0
     healthtext = font.render(str(lolHP) + "/" + str(totalHP).zfill(2), True, (0, 0, 0))
     healthrect = healthtext.get_rect()
     healthrect.center = (500, 560)
     screen.blit(healthtext, healthrect)
+
+    healthtext_2 = font.render(str(lolHP_2) + "/" + str(totalHP).zfill(2), True, (0, 0, 0))
+    healthrect_2 = healthtext.get_rect()
+    healthrect_2.center = (500, 590)
+    screen.blit(healthtext_2, healthrect_2) 
     badtimer -= 2
     pygame.display.flip()
     
