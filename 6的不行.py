@@ -350,8 +350,8 @@ while 1:
         n[0] += 2 * cos(n[2]) * 4
         n[1] += 2 * sin(n[2]) * 4
         if n[0] < -50 or n[0] > 1000 or n[1] < -50 or n[1] > 600:
-            listn.pop(index1)
-        nRect = pygame.Rect(NormalAttack.get_rect())
+            listn.pop(index2)
+        nRect = pygame.Rect(NormalAttack_2.get_rect())
         nRect.left = n[0]
         nRect.top = n[1]
 
@@ -440,6 +440,7 @@ while 1:
             if event.key == K_RIGHT:
                 key[7] = False
     lolcolliderect = pygame.Rect(lolx + 25, loly + 25, 50, 50)
+    lolcolliderect_2 = pygame.Rect(lolx_2 + 25, loly_2 + 25, 50, 50)
     index3 = 0
     for m in Mons:
         mRect = pygame.Rect(m[0], m[1], 25, 25)
@@ -450,6 +451,17 @@ while 1:
             m[0] -= 3 * cos(m[2])
             m[1] -= 3 * sin(m[2])
         index3 += 1
+
+    index4 = 0
+    for m in Mons:
+        mRect = pygame.Rect(m[0], m[1], 25, 25)
+        if lolcolliderect_2.colliderect(mRect):
+            Mons.pop(index4)
+            lolHP_2 -= 200
+        else:
+            m[0] -= 3 * cos(m[2])
+            m[1] -= 3 * sin(m[2])
+        index4 += 1
                 
     if lolx < 0:
         lolx = 0
