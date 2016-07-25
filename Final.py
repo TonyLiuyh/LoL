@@ -8,7 +8,7 @@ import time
 
 pygame.init()
 
-button1 = pygame.transform.scale(pygame.image.load("images/Button.png"), (300, 75))
+button1 = pygame.transform.scale(pygame.image.load("images/Button.jpg"), (300, 75))
 screen = pygame.display.set_mode((1300, 650))
 button2 = button1
 button3 = button2
@@ -463,6 +463,8 @@ def PVP():
 
     Ez_cdtext = [0, 0, 0, 0, 0]
     Ez_cdRect = [0, 0, 0, 0, 0]
+    Lu_cdtext = [0, 0, 0, 0, 0]
+    Lu_cdRect = [0, 0, 0, 0, 0]
     ez_tHP = 5000
     ez_cHP = ez_tHP
 
@@ -497,18 +499,19 @@ def PVP():
 
     Lucian = pygame.transform.scale(pygame.image.load("images/Lucian.jpg"), (100, 100))
     Lucian_g = pygame.transform.scale(pygame.image.load("images/Lucian_G.png"), (50, 50))
-    lucian_h = pygame.transform.scale(pygame.image.load("images/Lucian_H.png"), (50, 50))
-    lucian_j = pygame.transform.scale(pygame.image.load("images/Lucian_J.png"), (50, 50))
+    lucian_h = pygame.transform.scale(pygame.image.load("images/Lucian_H.jpg"), (50, 50))
+    lucian_j = pygame.transform.scale(pygame.image.load("images/Lucian_J.jpg"), (50, 50))
     lucian_k = pygame.transform.scale(pygame.image.load("images/Lucian_K.jpg"), (50, 50))
-    lucian_l = pygame.transform.scale(pygame.image.load("images/Lucian_L.png"), (50, 50))
-    Lucian_h = lucian_h
-    Lucian_j = lucian_j
-    Lucian_l = pygame.transform.scale(pygame.image.load("images/Lucian_L.png"), (60, 60))
+    lucian_l = pygame.transform.scale(pygame.image.load("images/Lucian_L.jpg"), (50, 50))
+    Lucian_h = pygame.transform.scale(pygame.image.load("images/Lucian_H.jpg"), (50, 50))
+    Lucian_j = pygame.transform.scale(pygame.image.load("images/Lucian_J.jpg"), (50, 50))
+    Lucian_l = pygame.transform.scale(pygame.image.load("images/Lucian_L.jpg"), (60, 60))
     Lucian_listhx = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
     Lucian_listhy = [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000]
     Lucian_listhz = [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5]
     Lucian_cd = [0, 0, 0, 0, 0]
-    Luciancd = [1000, 5000, 7000, 10000, 30000]
+    luatkrate = 2
+    Luciancd = [1000 / luatkrate, 5000, 7000, 10000, 30000]
     Lucian_listg = []
     LuPosition = [1000, 200]
     LuSpeed = 4
@@ -541,6 +544,7 @@ def PVP():
     ltimer = 26
     Lucian_listl = []
     keycontrol = 0
+    
 
     while 1:
         run = 1
@@ -698,13 +702,11 @@ def PVP():
                     if (EzPosition[0] - LuPosition[0]) ** 2 + (EzPosition[1] - LuPosition[1]) ** 2 <= 360000:
                         if Lucian_cd[0] == 0:
                             Lucian_listg.append([LuPosition[0] + 25, LuPosition[1] + 25, 0])
-                            Lucian_timeg = pygame.time.get_ticks()
                             Lu_timeg = pygame.time.get_ticks()
+                            Lucian_cd[0] = Luciancd[0]
                 elif event.key == 109 and keycontrol == 0:
                     if (EzPosition[0] - LuPosition[0]) ** 2 + (EzPosition[1] - LuPosition[1]) ** 2 <= 360000:
-                        print('M1')
                         if Lucian_cd[1] == 0:
-                            print('M2')
                             a = LuPosition[0] - EzPosition[0]
                             b = LuPosition[1] - EzPosition[1]
                             if a != 0:
@@ -727,9 +729,9 @@ def PVP():
                                 Lucian_listhz[n] = n
                             atk = 1.5
                             damageava = 1
-                    print("M")
+                            Lu_timeh = pygame.time.get_ticks()
+                            Lucian_cd[1] = Luciancd[1]
                 elif event.key == 44 and keycontrol == 0:
-                    print(",")
                     if Lucian_cd[2] == 0:
                         a = LuPosition[0] - EzPosition[0]
                         b = LuPosition[1] - EzPosition[1]
@@ -750,8 +752,8 @@ def PVP():
                             Lu_cosj = 0 - cos(Lu_jPosition[2])
                             Lu_sinj = 0 - sin(Lu_jPosition[2])
                         dmgavj = 1
-                        Lu_timeh = pygame.time.get_ticks()
-                        Lucian_cd[1] = Luciancd[1]
+                        Lu_timej = pygame.time.get_ticks()
+                        Lucian_cd[2] = Luciancd[2]
                     
                 elif event.key == 46:
                     if Lucian_cd[3] == 0:
@@ -778,8 +780,8 @@ def PVP():
                                 LuPosition[1] -= 300
                             else:
                                 LuPosition[1] += 300
-                        Lu_timej = pygame.time.get_ticks()
-                        Lucian_cd[2] = Luciancd[2]
+                        Lu_timek = pygame.time.get_ticks()
+                        Lucian_cd[3] = Luciancd[3]
                     
                 elif event.key == 47:
                     if Lucian_cd[4] == 0:
@@ -802,6 +804,8 @@ def PVP():
                         ltimer = 0
                         lav = 1
                         keycontrol = 1
+                        Lu_timel = pygame.time.get_ticks()
+                        Lucian_cd[4] = Luciancd[4]
  
                         
             if event.type == pygame.KEYUP:
@@ -1101,6 +1105,9 @@ def PVP():
             Ez_cdtext[a] = font2.render(str(Ez_cd[a]//1000 + 1), True, (255, 255, 255))
             Ez_cdRect[a] = Ez_cdtext[a].get_rect()
             Ez_cdRect[a].center = (-25 + 50 * a, 627)
+            Lu_cdtext[a] = font2.render(str(Lucian_cd[a]//1000 + 1), True, (255, 255, 255))
+            Lu_cdRect[a] = Lu_cdtext[a].get_rect()
+            Lu_cdRect[a].center = (1075 + 50 * a, 627)
 
         if Ez_cd[1] > 0:
             ez_h.set_alpha(150)
@@ -1141,6 +1148,39 @@ def PVP():
             Ez_cd[4] = 0
             ez_l.set_alpha(255)
             cdreductionl = 0
+
+        if Lucian_cd[0] > 0:
+            Lucian_cd[0] = Luciancd[0] - (pygame.time.get_ticks() - Lu_timeg)
+        else:
+            Lucian_cd[0] = 0
+        if Lucian_cd[1] > 0:
+            Lucian_cd[1] = Luciancd[1] - (pygame.time.get_ticks() - Lu_timeh)
+            lucian_h.set_alpha(150)
+            screen.blit(Lu_cdtext[1], Lu_cdRect[1])
+        else:
+            Lucian_cd[1] = 0
+            lucian_h.set_alpha(255)
+        if Lucian_cd[2] > 0:
+            Lucian_cd[2] = Luciancd[2] - (pygame.time.get_ticks() - Lu_timej)
+            lucian_j.set_alpha(150)
+            screen.blit(Lu_cdtext[2], Lu_cdRect[2])
+        else:
+            Lucian_cd[2] = 0
+            lucian_j.set_alpha(255)
+        if Lucian_cd[3] > 0:
+            Lucian_cd[3] = Luciancd[3] - (pygame.time.get_ticks() - Lu_timek)
+            lucian_k.set_alpha(150)
+            screen.blit(Lu_cdtext[3], Lu_cdRect[3])
+        else:
+            Lucian_cd[3] = 0
+            lucian_k.set_alpha(255)
+        if Lucian_cd[4] > 0:
+            Lucian_cd[4] = Luciancd[4] - (pygame.time.get_ticks() - Lu_timel)
+            lucian_l.set_alpha(150)
+            screen.blit(Lu_cdtext[4], Lu_cdRect[4])
+        else:
+            Lucian_cd[4] = 0
+            lucian_l.set_alpha(255)
 
         if ez_cHP <= 0:
             ez_cHP = ez_tHP
